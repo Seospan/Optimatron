@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from bakery.views import BuildableTemplateView
+from bakery.views import BuildableTemplateView, BuildableListView, BuildableDetailView
+from .models import Snippet
 
 # Create your views here.
 from django.http import HttpResponse
@@ -21,6 +22,22 @@ class TestView(BuildableTemplateView):
         return context
 
     template_name = "core/test.html"
+
+
+class SnippetListView(BuildableListView):
+    queryset = Snippet.objects.all().order_by("titre")
+    build_path = 'snippets/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(SnippetListView, self).get_context_data(**kwargs)
+        return context
+
+class SnippetDetailView(BuildableDetailView):
+    model = Snippet
+
+    def get_context_data(self, **kwargs):
+        context = super(SnippetDetailView, self).get_context_data(**kwargs)
+        return context
 
 
 def testid(request,id):

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'bakery',
+    'builder',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -130,4 +131,6 @@ BUILD_DIR = 'D:/Repos/optimatron/Exports'
 
 BAKERY_VIEWS = (
     'core.views.TestView',
+    'core.views.SnippetListView',
+    'core.views.SnippetDetailView'
 )

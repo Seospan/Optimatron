@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% if return_code == 0 %}
+    Build done with return {{ return_code }}, success !<br />
+{% elif return_code == 1 %}
+    Build failed, return code {{ return_code }}<br />
+{% else %}
+    No return code, nieh ? {{ return_val }}
+{% endif %}
+    Output :<br />
+    {{ out|default:"None" }}<br />
+    Error :<br />
+    {{ err|default:"None"|linebreaks }}
+<br><br>
+</body>
+</html>

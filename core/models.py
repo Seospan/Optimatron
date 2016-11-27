@@ -11,3 +11,8 @@ class Snippet(models.Model):
 
     def __str__(self):
         return self.titre
+
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse("snippet-detail", args=[str(self.pk)])
+

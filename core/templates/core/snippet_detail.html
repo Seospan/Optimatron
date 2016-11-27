@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% block content %}
+    <h2>Snippet : {{ object.titre }}</h2>
+    Slug : {{ object.slug }}<br />
+    Date : {{ object.pub_date }}<br />
+    Contenu :<br />
+    {{ object.contenu|safe }}
+{% endblock %}
+</body>
+</html>
