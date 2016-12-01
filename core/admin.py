@@ -6,7 +6,8 @@ from .models import Snippet, Website, Page, Block, Section, Footer, Header, Asid
 
 
 class OptimatronModelAdmin(admin.ModelAdmin):
-    change_list_template = "admin/change_list_filter_sidebar.html"
+    #change_list_template = "admin/change_list_filter_sidebar.html"
+    pass
 
 
 class OptimatronModelContentAdmin(OptimatronModelAdmin):
