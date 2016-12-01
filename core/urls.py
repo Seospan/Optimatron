@@ -4,6 +4,7 @@ from .views import TestView, SnippetListView, SnippetDetailView
 from .views import index, testid
 
 urlpatterns = [
+    #url(r'^jet/', include('jet.urls', 'jet')),  # Django JET URLS
     url(r'^$', index, name='index'),
     url(r'^test/', TestView.as_view()),
     #url(r'^test/$', test),

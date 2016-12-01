@@ -20,6 +20,7 @@ class Snippet(models.Model):
 
 
 class ContentBase(models.Model):
+    is_active = models.BooleanField(default=1, verbose_name="Actif")
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     #Both author & updated_by managed by django-author
@@ -29,11 +30,15 @@ class ContentBase(models.Model):
     class Meta:
         abstract = True
 
+    def is_active_value(self):
+        return self.is_active
+    is_active_value.boolean = True
+
 
 class CssAttributesMixin(models.Model):
-    css_class = models.CharField(max_length=256, verbose_name="CSS classes")
-    css_id = models.CharField(max_length=128, verbose_name="CDD unique id")
-    css_inline = models.CharField(max_length=1200, verbose_name="CSS en ligne")
+    css_class = models.CharField(max_length=256, verbose_name="CSS classes", blank=True)
+    css_id = models.CharField(max_length=128, verbose_name="CDD unique id", blank=True)
+    css_inline = models.CharField(max_length=1200, verbose_name="CSS en ligne", blank=True)
 
     class Meta:
         abstract = True
@@ -62,10 +67,12 @@ class Website(ContentBase):
     def __str__(self):
         return self.nom
 
+    def created_on_small(self):
+        return self.created_on.time()
+
 class Page(ContentBase, CssAttributesMixin):
     titre = models.CharField(max_length=512)
     websites = models.ManyToManyField(Website, related_name="pages")
-    test = models.ManyToManyField(Snippet)
 
     def __str__(self):
         return self.titre

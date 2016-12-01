@@ -31,15 +31,16 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'tinymce_4',
-    'grappelli',
-    'filebrowser',
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'tinymce_4',
+    'grappelli',
+    #'jet',
+    'django.contrib.admin',
+    'filebrowser',
     'core',
     'author',
     'bakery',
@@ -112,7 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fr-fr'
 
 TIME_ZONE = 'UTC'
 
@@ -131,8 +132,12 @@ STATIC_ROOT = 'static'
 
 BUILD_DIR = 'D:/Repos/optimatron/Exports'
 
+# -------------------------------Bakery Settings-------------------------------
 BAKERY_VIEWS = (
     'core.views.TestView',
     'core.views.SnippetListView',
     'core.views.SnippetDetailView'
 )
+
+# -------------------------------Grapelli Settings-------------------------------
+GRAPPELLI_ADMIN_TITLE = "Optimatron"
