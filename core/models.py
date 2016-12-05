@@ -63,12 +63,15 @@ class Block(ContentBase, CssAttributesMixin):
 
 class Website(ContentBase):
     nom = models.CharField(max_length=512)
+    #menu = models.ForeignKey(Tree, blank=True, null=True)
+    #test = models.CharField(max_length=10, null=True)
 
     def __str__(self):
         return self.nom
 
     def created_on_small(self):
         return self.created_on.time()
+
 
 class Page(ContentBase, CssAttributesMixin):
     titre = models.CharField(max_length=512)

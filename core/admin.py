@@ -4,7 +4,6 @@ from django.contrib.admin import DateFieldListFilter
 # Register your models here.
 from .models import Snippet, Website, Page, Block, Section, Footer, Header, Aside
 
-
 class OptimatronModelAdmin(admin.ModelAdmin):
     #change_list_template = "admin/change_list_filter_sidebar.html"
     pass
@@ -34,7 +33,6 @@ class OptimatronModelContentAdmin(OptimatronModelAdmin):
 class SnippetAdmin(OptimatronModelAdmin):
     date_hierarchy = 'pub_date'
     list_display = ('titre', 'slug', 'pub_date')
-
 
 @admin.register(Website)
 class WebsiteAdmin(OptimatronModelContentAdmin):

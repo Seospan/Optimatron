@@ -37,8 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tinymce_4',
-    #'grappelli',
+    'jet.dashboard',
     'jet',
+    #'grappelli',
     'django.contrib.admin',
     'filebrowser',
     'core',
@@ -140,4 +141,4 @@ BAKERY_VIEWS = (
 )
 
 # -------------------------------Grapelli Settings-------------------------------
-GRAPPELLI_ADMIN_TITLE = "Optimatron"
+#GRAPPELLI_ADMIN_TITLE = "Optimatron"

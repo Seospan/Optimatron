@@ -17,10 +17,14 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from filebrowser.sites import site
 
+
 urlpatterns = [
     url(r'^admin/filebrowser/', include(site.urls)),
     url(r'^jet/', include('jet.urls', 'jet')),  # Django JET URLS
+    url(r'^jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),  # Django JET dashboard URLS
     #url(r'^grappelli/', include('grappelli.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^', include('core.urls')),
 ]
+
+admin.site.site_header = 'Optimatron - Anadore'
