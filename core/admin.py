@@ -1,8 +1,9 @@
 from django.contrib import admin
 from django.contrib.admin import DateFieldListFilter
+from adminsortable2.admin import SortableAdminMixin, SortableInlineAdminMixin
 
 # Register your models here.
-from .models import Snippet, Website, Page, Block, Section, Footer, Header, Aside
+from .models import Snippet, Website, Page, Block, Section, Footer, Header, Aside, BlockInSection
 
 class OptimatronModelAdmin(admin.ModelAdmin):
     #change_list_template = "admin/change_list_filter_sidebar.html"
@@ -10,9 +11,10 @@ class OptimatronModelAdmin(admin.ModelAdmin):
 
 
 class OptimatronModelContentAdmin(OptimatronModelAdmin):
-    list_display_before = ['is_active','is_active_value']
-    list_display_after = ['created_on_date', 'updated_on_date']
-    list_display =  list_display_before+list_display_after
+    list_display__active = ['is_active','is_active_value']
+    list_display__dates = ['created_on_date', 'updated_on_date']
+    list_display = list_display__active + list_display__dates
+
     list_display_links = ['nom']
 
     list_filter = ['author', 'created_on', 'updated_on']
@@ -39,9 +41,9 @@ class WebsiteAdmin(OptimatronModelContentAdmin):
     date_hierarchy = 'created_on'
     readonly_fields = ['created_on', 'updated_on']
 
-    list_display = OptimatronModelContentAdmin.list_display_before\
+    list_display = OptimatronModelContentAdmin.list_display__active\
         + ['nom', 'author']\
-        + OptimatronModelContentAdmin.list_display_after
+        + OptimatronModelContentAdmin.list_display__dates
 
     list_filter = OptimatronModelContentAdmin.list_filter + []
 
@@ -52,17 +54,33 @@ class PageAdmin(OptimatronModelAdmin):
     filter_vertical = ['websites']
 
 
+class BlockInSectionSectionInline(SortableInlineAdminMixin, admin.TabularInline):
+    model = BlockInSection
+    readonly_fields = ['nice_position', ]
+    fields = ['position', 'nice_position', 'block' ]
+
+
+class BlockInSectionBlockInline(admin.TabularInline):
+    model = BlockInSection
+    fields = [ 'section', 'position',]
+
+
 @admin.register(Block)
-class BlockAdmin(OptimatronModelAdmin):
+class BlockAdmin(OptimatronModelContentAdmin ):
     date_hierarchy = 'updated_on'
+    list_display = [] + OptimatronModelContentAdmin.list_display__active \
+                   + [ 'nom', 'author'] \
+                   + OptimatronModelContentAdmin.list_display__dates
+    inlines = [ BlockInSectionBlockInline, ]
 
 
 @admin.register(Section)
 class SectionAdmin(OptimatronModelAdmin):
     #date_hierarchy = 'updated_on'
+    fields = []
     list_display = ['nom']
-    filter_horizontal = ('pages','blocks')
-
+    inlines = [ BlockInSectionSectionInline, ]
+    #filter_horizontal = ('pages','blocks')
 
 
 @admin.register(Header)

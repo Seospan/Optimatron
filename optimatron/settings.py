@@ -43,7 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'filebrowser',
     'core',
+    'blocks_standard',
     'author',
+    'adminsortable2',
     'bakery',
     'builder',
 ]

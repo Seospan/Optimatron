@@ -24,8 +24,8 @@ class ContentBase(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     #Both author & updated_by managed by django-author
-    author = models.ForeignKey(User, related_name="%(class)s_author")
-    updated_by = models.DateTimeField
+    author = models.ForeignKey(User, related_name="%(class)s_author", blank=True, null=True, on_delete=models.SET(1))
+    updated_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
 
     class Meta:
         abstract = True
@@ -43,22 +43,6 @@ class CssAttributesMixin(models.Model):
     class Meta:
         abstract = True
 
-
-class Block(ContentBase, CssAttributesMixin):
-    BLOC_FORMAT_CHOICES = (
-        ("FULL", "Full width"),
-        ("HALF", "Half width"),
-        ("THIRD", "One third"),
-        ("FOURTH", "One fourth"),
-        ("2FOURTH", "Two fourth"),
-        ("3FOURTH", "Three fourth"),
-        ("FIFTH", "One fifth"),
-    )
-    nom = models.CharField(max_length=512)
-    format = models.CharField(max_length=32, choices=BLOC_FORMAT_CHOICES, verbose_name="Format du bloc")
-
-    def __str__(self):
-        return self.nom
 
 
 class Website(ContentBase):
@@ -80,13 +64,50 @@ class Page(ContentBase, CssAttributesMixin):
     def __str__(self):
         return self.titre
 
+
 class Section(ContentBase, CssAttributesMixin):
-    nom = models.CharField(max_length=512, blank=True)
-    blocks = models.ManyToManyField("Block", related_name="section")
+    nom = models.CharField(max_length=512, null=True)
+    #blocks = models.ManyToManyField("Block", related_name="section", through="BlockInSection")
     pages = models.ManyToManyField("Page", related_name="sections")
 
     def __str__(self):
         return self.nom
+
+
+class BlockInSection(models.Model):
+    section = models.ForeignKey("Section", on_delete=models.CASCADE)
+    block = models.ForeignKey("Block", on_delete=models.CASCADE)
+    position = models.PositiveSmallIntegerField(default=0, blank=False, null=False, verbose_name="Position of block in section")
+
+    def nice_position(self):
+        return self.position
+    nice_position.short_description = "Position du block"
+
+    class Meta(object):
+        ordering = ('position',)
+
+
+class Block(ContentBase, CssAttributesMixin):
+    BLOC_FORMAT_CHOICES = (
+        ("FULL", "Full width"),
+        ("HALF", "Half width"),
+        ("THIRD", "One third"),
+        ("FOURTH", "One fourth"),
+        ("2FOURTH", "Two fourth"),
+        ("3FOURTH", "Three fourth"),
+        ("FIFTH", "One fifth"),
+    )
+    nom = models.CharField(max_length=512)
+    format = models.CharField(max_length=32, choices=BLOC_FORMAT_CHOICES, verbose_name="Format du bloc")
+    #position = models.PositiveSmallIntegerField(default=0, blank=False, null=False)
+    #sections = models.ForeignKey(Section, related_name="Blocks", null=True, blank=True, on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return self.nom
+
+    #class Meta(object):
+    #    ordering = ('position',)
+
 
 class Footer(ContentBase):
     blocks = models.ManyToManyField(Block, related_name="footer")
