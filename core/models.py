@@ -7,6 +7,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericRelation
 from multiselectfield import MultiSelectField
+from django.forms import MultipleChoiceField, CheckboxSelectMultiple
 
 # Create your models here.
 
