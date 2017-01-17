@@ -2,6 +2,10 @@ from django.db import models
 from tinymce_4.fields import TinyMCEModelField
 from author.decorators import with_author
 from django.contrib.auth.models import User
+from django.contrib import admin
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericRelation
 
 # Create your models here.
 
@@ -17,6 +21,37 @@ class Snippet(models.Model):
     def get_absolute_url(self):
         from django.urls import reverse
         return reverse("snippet-detail", args=[str(self.pk)])
+
+
+class ExternalLink(models.Model):
+    LINK_ICONS_CHOICES = (
+        ('Réseaux sociaux',(
+                ("fb.jpg", 'Facebook'),
+                ("twitter.jpg", 'Twitter'),
+                ("linkedin.jpg", 'Linkedin'),
+            )
+        ),
+        ('Autres',(
+                ("mail.jpg", 'Mail'),
+            )
+        )
+    )
+
+    titre = models.CharField(max_length=128, blank=True, null=True)
+    url = models.URLField()
+    link_text = models.CharField(max_length=256)
+    icone =  models.CharField(
+        max_length=128,
+        choices=LINK_ICONS_CHOICES,
+        default='fb.jpg',
+    )
+    #Generic relation
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+
+    def __str__(self):
+        return self.titre
 
 
 class ContentBase(models.Model):
@@ -44,9 +79,12 @@ class CssAttributesMixin(models.Model):
         abstract = True
 
 
-
 class Website(ContentBase):
     nom = models.CharField(max_length=512)
+    favicon = models.ImageField(upload_to="favicon", null=True, blank=True)
+    icone = models.ImageField(upload_to="icone", null=True, blank=True)
+    external_links = GenericRelation(ExternalLink)
+    #external_links = models.ManyToManyField(ExternalLink, related_name=u"website", verbose_name = u"External Links" )
     #menu = models.ForeignKey(Tree, blank=True, null=True)
     #test = models.CharField(max_length=10, null=True)
 

@@ -1,9 +1,10 @@
 from django.contrib import admin
 from django.contrib.admin import DateFieldListFilter
 from adminsortable2.admin import SortableAdminMixin, SortableInlineAdminMixin
+from django.contrib.contenttypes.admin import GenericTabularInline
 
 # Register your models here.
-from .models import Snippet, Website, Page, Block, Section, Footer, Header, Aside, BlockInSection
+from .models import Snippet, Website, Page, Block, Section, Footer, Header, Aside, BlockInSection, ExternalLink
 
 class OptimatronModelAdmin(admin.ModelAdmin):
     #change_list_template = "admin/change_list_filter_sidebar.html"
@@ -36,6 +37,17 @@ class SnippetAdmin(OptimatronModelAdmin):
     date_hierarchy = 'pub_date'
     list_display = ('titre', 'slug', 'pub_date')
 
+
+#@admin.register(ExternalLink)
+#class ExternalLinkAdmin(OptimatronModelAdmin):
+#    model = ExternalLink
+
+
+class ExternalLinkInline(GenericTabularInline):
+    model=ExternalLink
+    fields = [ 'titre', 'url', 'link_text', 'icone']
+
+
 @admin.register(Website)
 class WebsiteAdmin(OptimatronModelContentAdmin):
     date_hierarchy = 'created_on'
@@ -46,6 +58,7 @@ class WebsiteAdmin(OptimatronModelContentAdmin):
         + OptimatronModelContentAdmin.list_display__dates
 
     list_filter = OptimatronModelContentAdmin.list_filter + []
+    inlines = [ExternalLinkInline,]
 
 
 @admin.register(Page)
