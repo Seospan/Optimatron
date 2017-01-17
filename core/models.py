@@ -6,6 +6,7 @@ from django.contrib import admin
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericRelation
+from multiselectfield import MultiSelectField
 
 # Create your models here.
 
@@ -98,15 +99,31 @@ class Website(ContentBase):
 class Page(ContentBase, CssAttributesMixin):
     titre = models.CharField(max_length=512)
     websites = models.ManyToManyField(Website, related_name="pages")
+    css_displayAside = models.BooleanField(default=False)
+    css_displayHeader = models.BooleanField(default=True)
+    css_displayFooter = models.BooleanField(default=True)
 
     def __str__(self):
         return self.titre
 
 
 class Section(ContentBase, CssAttributesMixin):
+    TITLE_TYPE_CHOICES = (
+        ("H2", "h2"),
+        ("H3", "h3"),
+    )
+    TITLE_CLASS_CHOICES = (
+        ("Classe1","Classe 1"),
+        ("Classe2","Classe 2"),
+        ("Classe3","Classe 3"),
+    )
     nom = models.CharField(max_length=512, null=True)
+    css_haswrapper = models.BooleanField(default=False)
     #blocks = models.ManyToManyField("Block", related_name="section", through="BlockInSection")
     pages = models.ManyToManyField("Page", related_name="sections")
+    titre = models.CharField(max_length=256)
+    title_type = models.CharField(max_length=16, choices=TITLE_TYPE_CHOICES, verbose_name="Type de titre")
+    classe_titre = MultiSelectField(choices=TITLE_CLASS_CHOICES, max_choices=3, max_length=64, null=True, blank=True, verbose_name="Type de titre")
 
     def __str__(self):
         return self.nom

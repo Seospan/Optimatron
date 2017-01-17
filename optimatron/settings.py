@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tinymce_4',
+    'multiselectfield',
     'jet.dashboard',
     'jet',
     # 'grappelli',
